@@ -87,12 +87,12 @@ if ($action === 'getCountries') {
         exit;
     }
     
-    $sql = "SELECT DISTINCT account_country FROM data WHERE account_country IS NOT NULL AND account_country != '' ORDER BY account_country";
+    $sql = "SELECT DISTINCT country FROM data WHERE country IS NOT NULL AND country != '' ORDER BY country";
     $result = $conn->query($sql);
     
     if ($result) {
         while ($row = $result->fetch_assoc()) {
-            $countries[] = $row['account_country'];
+            $countries[] = $row['country'];
         }
         
         // Store in cache
@@ -120,12 +120,12 @@ if ($action === 'getCities') {
         exit;
     }
     
-    $sql = "SELECT DISTINCT account_city FROM data WHERE account_city IS NOT NULL AND account_city != '' ORDER BY account_city";
+    $sql = "SELECT DISTINCT city FROM data WHERE city IS NOT NULL AND city != '' ORDER BY city";
     $result = $conn->query($sql);
     
     if ($result) {
         while ($row = $result->fetch_assoc()) {
-            $cities[] = $row['account_city'];
+            $cities[] = $row['city'];
         }
         
         // Store in cache
@@ -146,32 +146,32 @@ if ($action === 'exportToCSV') {
     // Get filter values from request
     $searchValue = isset($_GET['searchValue']) ? $_GET['searchValue'] : "";
     
-    // Account Name filters
-    $accountNameContains = isset($_GET['accountNameContains']) ? $_GET['accountNameContains'] : "";
-    $accountNameStartsWith = isset($_GET['accountNameStartsWith']) ? $_GET['accountNameStartsWith'] : "";
-    $accountNameIncludes = isset($_GET['accountNameIncludes']) ? $_GET['accountNameIncludes'] : "";
-    $accountNameExcludes = isset($_GET['accountNameExcludes']) ? $_GET['accountNameExcludes'] : "";
+    // Org Name filters
+    $orgNameContains = isset($_GET['orgNameContains']) ? $_GET['orgNameContains'] : "";
+    $orgNameStartsWith = isset($_GET['orgNameStartsWith']) ? $_GET['orgNameStartsWith'] : "";
+    $orgNameIncludes = isset($_GET['orgNameIncludes']) ? $_GET['orgNameIncludes'] : "";
+    $orgNameExcludes = isset($_GET['orgNameExcludes']) ? $_GET['orgNameExcludes'] : "";
     
-    // Website filters
-    $accountWebsiteContains = isset($_GET['accountWebsiteContains']) ? $_GET['accountWebsiteContains'] : "";
-    $accountWebsiteStartsWith = isset($_GET['accountWebsiteStartsWith']) ? $_GET['accountWebsiteStartsWith'] : "";
-    $accountWebsiteIncludes = isset($_GET['accountWebsiteIncludes']) ? $_GET['accountWebsiteIncludes'] : "";
-    $accountWebsiteExcludes = isset($_GET['accountWebsiteExcludes']) ? $_GET['accountWebsiteExcludes'] : "";
+    // Org Website filters
+    $orgWebsiteContains = isset($_GET['orgWebsiteContains']) ? $_GET['orgWebsiteContains'] : "";
+    $orgWebsiteStartsWith = isset($_GET['orgWebsiteStartsWith']) ? $_GET['orgWebsiteStartsWith'] : "";
+    $orgWebsiteIncludes = isset($_GET['orgWebsiteIncludes']) ? $_GET['orgWebsiteIncludes'] : "";
+    $orgWebsiteExcludes = isset($_GET['orgWebsiteExcludes']) ? $_GET['orgWebsiteExcludes'] : "";
     
-    // Industry filters
-    $accountIndustryContains = isset($_GET['accountIndustryContains']) ? $_GET['accountIndustryContains'] : "";
-    $accountIndustryStartsWith = isset($_GET['accountIndustryStartsWith']) ? $_GET['accountIndustryStartsWith'] : "";
-    $accountIndustryIncludes = isset($_GET['accountIndustryIncludes']) ? $_GET['accountIndustryIncludes'] : "";
-    $accountIndustryExcludes = isset($_GET['accountIndustryExcludes']) ? $_GET['accountIndustryExcludes'] : "";
+    // Seniority filters
+    $seniorityContains = isset($_GET['seniorityContains']) ? $_GET['seniorityContains'] : "";
+    $seniorityStartsWith = isset($_GET['seniorityStartsWith']) ? $_GET['seniorityStartsWith'] : "";
+    $seniorityIncludes = isset($_GET['seniorityIncludes']) ? $_GET['seniorityIncludes'] : "";
+    $seniorityExcludes = isset($_GET['seniorityExcludes']) ? $_GET['seniorityExcludes'] : "";
     
-    // Employee Count filters
-    $accountEmployeeCountContains = isset($_GET['accountEmployeeCountContains']) ? $_GET['accountEmployeeCountContains'] : "";
-    $accountEmployeeCountStartsWith = isset($_GET['accountEmployeeCountStartsWith']) ? $_GET['accountEmployeeCountStartsWith'] : "";
-    $accountEmployeeCountIncludes = isset($_GET['accountEmployeeCountIncludes']) ? $_GET['accountEmployeeCountIncludes'] : "";
-    $accountEmployeeCountExcludes = isset($_GET['accountEmployeeCountExcludes']) ? $_GET['accountEmployeeCountExcludes'] : "";
+    // Title filters
+    $titleContains = isset($_GET['titleContains']) ? $_GET['titleContains'] : "";
+    $titleStartsWith = isset($_GET['titleStartsWith']) ? $_GET['titleStartsWith'] : "";
+    $titleIncludes = isset($_GET['titleIncludes']) ? $_GET['titleIncludes'] : "";
+    $titleExcludes = isset($_GET['titleExcludes']) ? $_GET['titleExcludes'] : "";
     
-    // Founded Year filter
-    $accountFoundedYear = isset($_GET['accountFoundedYear']) ? $_GET['accountFoundedYear'] : "";
+    // Org Founded Year filter
+    $orgFoundedYear = isset($_GET['orgFoundedYear']) ? $_GET['orgFoundedYear'] : "";
     
     // Country filter
     $country = isset($_GET['country']) ? json_decode($_GET['country'], true) : [];
@@ -188,27 +188,27 @@ if ($action === 'exportToCSV') {
     // Escape the filter values to prevent SQL injection
     $searchValue = $conn->real_escape_string($searchValue);
     
-    $accountNameContains = $conn->real_escape_string($accountNameContains);
-    $accountNameStartsWith = $conn->real_escape_string($accountNameStartsWith);
-    $accountNameIncludes = $conn->real_escape_string($accountNameIncludes);
-    $accountNameExcludes = $conn->real_escape_string($accountNameExcludes);
+    $orgNameContains = $conn->real_escape_string($orgNameContains);
+    $orgNameStartsWith = $conn->real_escape_string($orgNameStartsWith);
+    $orgNameIncludes = $conn->real_escape_string($orgNameIncludes);
+    $orgNameExcludes = $conn->real_escape_string($orgNameExcludes);
     
-    $accountWebsiteContains = $conn->real_escape_string($accountWebsiteContains);
-    $accountWebsiteStartsWith = $conn->real_escape_string($accountWebsiteStartsWith);
-    $accountWebsiteIncludes = $conn->real_escape_string($accountWebsiteIncludes);
-    $accountWebsiteExcludes = $conn->real_escape_string($accountWebsiteExcludes);
+    $orgWebsiteContains = $conn->real_escape_string($orgWebsiteContains);
+    $orgWebsiteStartsWith = $conn->real_escape_string($orgWebsiteStartsWith);
+    $orgWebsiteIncludes = $conn->real_escape_string($orgWebsiteIncludes);
+    $orgWebsiteExcludes = $conn->real_escape_string($orgWebsiteExcludes);
     
-    $accountIndustryContains = $conn->real_escape_string($accountIndustryContains);
-    $accountIndustryStartsWith = $conn->real_escape_string($accountIndustryStartsWith);
-    $accountIndustryIncludes = $conn->real_escape_string($accountIndustryIncludes);
-    $accountIndustryExcludes = $conn->real_escape_string($accountIndustryExcludes);
+    $seniorityContains = $conn->real_escape_string($seniorityContains);
+    $seniorityStartsWith = $conn->real_escape_string($seniorityStartsWith);
+    $seniorityIncludes = $conn->real_escape_string($seniorityIncludes);
+    $seniorityExcludes = $conn->real_escape_string($seniorityExcludes);
     
-    $accountEmployeeCountContains = $conn->real_escape_string($accountEmployeeCountContains);
-    $accountEmployeeCountStartsWith = $conn->real_escape_string($accountEmployeeCountStartsWith);
-    $accountEmployeeCountIncludes = $conn->real_escape_string($accountEmployeeCountIncludes);
-    $accountEmployeeCountExcludes = $conn->real_escape_string($accountEmployeeCountExcludes);
+    $titleContains = $conn->real_escape_string($titleContains);
+    $titleStartsWith = $conn->real_escape_string($titleStartsWith);
+    $titleIncludes = $conn->real_escape_string($titleIncludes);
+    $titleExcludes = $conn->real_escape_string($titleExcludes);
     
-    $accountFoundedYear = $conn->real_escape_string($accountFoundedYear);
+    $orgFoundedYear = $conn->real_escape_string($orgFoundedYear);
 
     // Default columns if none selected
     if (!empty($selectedColumns)) {
@@ -248,65 +248,65 @@ if ($action === 'exportToCSV') {
             $sql .= ")";
         }
         
-        // Apply Account Name filters
-        if (!empty($accountNameContains)) {
-            $sql .= " AND " . applyFilter('account_name', $accountNameContains, 'contains');
+        // Apply Org Name filters
+        if (!empty($orgNameContains)) {
+            $sql .= " AND " . applyFilter('org_name', $orgNameContains, 'contains');
         }
-        if (!empty($accountNameStartsWith)) {
-            $sql .= " AND " . applyFilter('account_name', $accountNameStartsWith, 'starts_with');
+        if (!empty($orgNameStartsWith)) {
+            $sql .= " AND " . applyFilter('org_name', $orgNameStartsWith, 'starts_with');
         }
-        if (!empty($accountNameIncludes)) {
-            $sql .= " AND " . applyFilter('account_name', $accountNameIncludes, 'include');
+        if (!empty($orgNameIncludes)) {
+            $sql .= " AND " . applyFilter('org_name', $orgNameIncludes, 'include');
         }
-        if (!empty($accountNameExcludes)) {
-            $sql .= " AND " . applyFilter('account_name', $accountNameExcludes, 'exclude');
-        }
-        
-        // Apply Website filters
-        if (!empty($accountWebsiteContains)) {
-            $sql .= " AND " . applyFilter('account_website', $accountWebsiteContains, 'contains');
-        }
-        if (!empty($accountWebsiteStartsWith)) {
-            $sql .= " AND " . applyFilter('account_website', $accountWebsiteStartsWith, 'starts_with');
-        }
-        if (!empty($accountWebsiteIncludes)) {
-            $sql .= " AND " . applyFilter('account_website', $accountWebsiteIncludes, 'include');
-        }
-        if (!empty($accountWebsiteExcludes)) {
-            $sql .= " AND " . applyFilter('account_website', $accountWebsiteExcludes, 'exclude');
+        if (!empty($orgNameExcludes)) {
+            $sql .= " AND " . applyFilter('org_name', $orgNameExcludes, 'exclude');
         }
         
-        // Apply Industry filters
-        if (!empty($accountIndustryContains)) {
-            $sql .= " AND " . applyFilter('account_industry', $accountIndustryContains, 'contains');
+        // Apply Org Website filters
+        if (!empty($orgWebsiteContains)) {
+            $sql .= " AND " . applyFilter('org_website_url', $orgWebsiteContains, 'contains');
         }
-        if (!empty($accountIndustryStartsWith)) {
-            $sql .= " AND " . applyFilter('account_industry', $accountIndustryStartsWith, 'starts_with');
+        if (!empty($orgWebsiteStartsWith)) {
+            $sql .= " AND " . applyFilter('org_website_url', $orgWebsiteStartsWith, 'starts_with');
         }
-        if (!empty($accountIndustryIncludes)) {
-            $sql .= " AND " . applyFilter('account_industry', $accountIndustryIncludes, 'include');
+        if (!empty($orgWebsiteIncludes)) {
+            $sql .= " AND " . applyFilter('org_website_url', $orgWebsiteIncludes, 'include');
         }
-        if (!empty($accountIndustryExcludes)) {
-            $sql .= " AND " . applyFilter('account_industry', $accountIndustryExcludes, 'exclude');
-        }
-        
-        // Apply Employee Count filters
-        if (!empty($accountEmployeeCountContains)) {
-            $sql .= " AND " . applyFilter('account_employee_count_range', $accountEmployeeCountContains, 'contains');
-        }
-        if (!empty($accountEmployeeCountStartsWith)) {
-            $sql .= " AND " . applyFilter('account_employee_count_range', $accountEmployeeCountStartsWith, 'starts_with');
-        }
-        if (!empty($accountEmployeeCountIncludes)) {
-            $sql .= " AND " . applyFilter('account_employee_count_range', $accountEmployeeCountIncludes, 'include');
-        }
-        if (!empty($accountEmployeeCountExcludes)) {
-            $sql .= " AND " . applyFilter('account_employee_count_range', $accountEmployeeCountExcludes, 'exclude');
+        if (!empty($orgWebsiteExcludes)) {
+            $sql .= " AND " . applyFilter('org_website_url', $orgWebsiteExcludes, 'exclude');
         }
         
-        // Apply Founded Year filter
-        if (!empty($accountFoundedYear)) {
-            $sql .= " AND `account_founded_year` = '$accountFoundedYear'";
+        // Apply Seniority filters
+        if (!empty($seniorityContains)) {
+            $sql .= " AND " . applyFilter('seniority', $seniorityContains, 'contains');
+        }
+        if (!empty($seniorityStartsWith)) {
+            $sql .= " AND " . applyFilter('seniority', $seniorityStartsWith, 'starts_with');
+        }
+        if (!empty($seniorityIncludes)) {
+            $sql .= " AND " . applyFilter('seniority', $seniorityIncludes, 'include');
+        }
+        if (!empty($seniorityExcludes)) {
+            $sql .= " AND " . applyFilter('seniority', $seniorityExcludes, 'exclude');
+        }
+        
+        // Apply Title filters
+        if (!empty($titleContains)) {
+            $sql .= " AND " . applyFilter('title', $titleContains, 'contains');
+        }
+        if (!empty($titleStartsWith)) {
+            $sql .= " AND " . applyFilter('title', $titleStartsWith, 'starts_with');
+        }
+        if (!empty($titleIncludes)) {
+            $sql .= " AND " . applyFilter('title', $titleIncludes, 'include');
+        }
+        if (!empty($titleExcludes)) {
+            $sql .= " AND " . applyFilter('title', $titleExcludes, 'exclude');
+        }
+        
+        // Apply Org Founded Year filter
+        if (!empty($orgFoundedYear)) {
+            $sql .= " AND `org_founded_year` = '$orgFoundedYear'";
         }
         
         // Apply Country filter
@@ -314,7 +314,7 @@ if ($action === 'exportToCSV') {
             $countryConditions = [];
             foreach ($country as $c) {
                 $escapedCountry = $conn->real_escape_string($c);
-                $countryConditions[] = "`account_country` = '$escapedCountry'";
+                $countryConditions[] = "`country` = '$escapedCountry'";
             }
             if (!empty($countryConditions)) {
                 $sql .= " AND (" . implode(" OR ", $countryConditions) . ")";
@@ -326,7 +326,7 @@ if ($action === 'exportToCSV') {
             $cityConditions = [];
             foreach ($city as $c) {
                 $escapedCity = $conn->real_escape_string($c);
-                $cityConditions[] = "`account_city` = '$escapedCity'";
+                $cityConditions[] = "`city` = '$escapedCity'";
             }
             if (!empty($cityConditions)) {
                 $sql .= " AND (" . implode(" OR ", $cityConditions) . ")";
@@ -367,24 +367,24 @@ if ($action === 'exportToCSV') {
         $filtersApplied = true;
     }
 
-    if (!empty($accountNameContains) || !empty($accountNameStartsWith) || !empty($accountNameIncludes) || !empty($accountNameExcludes)) {
-        $fileName .= 'AccountName_';
+    if (!empty($orgNameContains) || !empty($orgNameStartsWith) || !empty($orgNameIncludes) || !empty($orgNameExcludes)) {
+        $fileName .= 'OrgName_';
         $filtersApplied = true;
     }
-    if (!empty($accountWebsiteContains) || !empty($accountWebsiteStartsWith) || !empty($accountWebsiteIncludes) || !empty($accountWebsiteExcludes)) {
-        $fileName .= 'Website_';
+    if (!empty($orgWebsiteContains) || !empty($orgWebsiteStartsWith) || !empty($orgWebsiteIncludes) || !empty($orgWebsiteExcludes)) {
+        $fileName .= 'OrgWebsite_';
         $filtersApplied = true;
     }
-    if (!empty($accountIndustryContains) || !empty($accountIndustryStartsWith) || !empty($accountIndustryIncludes) || !empty($accountIndustryExcludes)) {
-        $fileName .= 'Industry_';
+    if (!empty($seniorityContains) || !empty($seniorityStartsWith) || !empty($seniorityIncludes) || !empty($seniorityExcludes)) {
+        $fileName .= 'Seniority_';
         $filtersApplied = true;
     }
-    if (!empty($accountEmployeeCountContains) || !empty($accountEmployeeCountStartsWith) || !empty($accountEmployeeCountIncludes) || !empty($accountEmployeeCountExcludes)) {
-        $fileName .= 'EmployeeCount_';
+    if (!empty($titleContains) || !empty($titleStartsWith) || !empty($titleIncludes) || !empty($titleExcludes)) {
+        $fileName .= 'Title_';
         $filtersApplied = true;
     }
-    if (!empty($accountFoundedYear)) {
-        $fileName .= 'FoundedYear_';
+    if (!empty($orgFoundedYear)) {
+        $fileName .= 'OrgFoundedYear_';
         $filtersApplied = true;
     }
     if (!empty($country)) {
@@ -434,32 +434,32 @@ if ($action === 'exportToCSV') {
 // Get the filter values from the request
 $searchValue = isset($_POST['searchValue']) ? $_POST['searchValue'] : '';
 
-// Account Name filters
-$accountNameContains = isset($_POST['accountNameContains']) ? $_POST['accountNameContains'] : '';
-$accountNameStartsWith = isset($_POST['accountNameStartsWith']) ? $_POST['accountNameStartsWith'] : '';
-$accountNameIncludes = isset($_POST['accountNameIncludes']) ? $_POST['accountNameIncludes'] : '';
-$accountNameExcludes = isset($_POST['accountNameExcludes']) ? $_POST['accountNameExcludes'] : '';
+// Org Name filters
+$orgNameContains = isset($_POST['orgNameContains']) ? $_POST['orgNameContains'] : '';
+$orgNameStartsWith = isset($_POST['orgNameStartsWith']) ? $_POST['orgNameStartsWith'] : '';
+$orgNameIncludes = isset($_POST['orgNameIncludes']) ? $_POST['orgNameIncludes'] : '';
+$orgNameExcludes = isset($_POST['orgNameExcludes']) ? $_POST['orgNameExcludes'] : '';
 
-// Website filters
-$accountWebsiteContains = isset($_POST['accountWebsiteContains']) ? $_POST['accountWebsiteContains'] : '';
-$accountWebsiteStartsWith = isset($_POST['accountWebsiteStartsWith']) ? $_POST['accountWebsiteStartsWith'] : '';
-$accountWebsiteIncludes = isset($_POST['accountWebsiteIncludes']) ? $_POST['accountWebsiteIncludes'] : '';
-$accountWebsiteExcludes = isset($_POST['accountWebsiteExcludes']) ? $_POST['accountWebsiteExcludes'] : '';
+// Org Website filters
+$orgWebsiteContains = isset($_POST['orgWebsiteContains']) ? $_POST['orgWebsiteContains'] : '';
+$orgWebsiteStartsWith = isset($_POST['orgWebsiteStartsWith']) ? $_POST['orgWebsiteStartsWith'] : '';
+$orgWebsiteIncludes = isset($_POST['orgWebsiteIncludes']) ? $_POST['orgWebsiteIncludes'] : '';
+$orgWebsiteExcludes = isset($_POST['orgWebsiteExcludes']) ? $_POST['orgWebsiteExcludes'] : '';
 
-// Industry filters
-$accountIndustryContains = isset($_POST['accountIndustryContains']) ? $_POST['accountIndustryContains'] : '';
-$accountIndustryStartsWith = isset($_POST['accountIndustryStartsWith']) ? $_POST['accountIndustryStartsWith'] : '';
-$accountIndustryIncludes = isset($_POST['accountIndustryIncludes']) ? $_POST['accountIndustryIncludes'] : '';
-$accountIndustryExcludes = isset($_POST['accountIndustryExcludes']) ? $_POST['accountIndustryExcludes'] : '';
+// Seniority filters
+$seniorityContains = isset($_POST['seniorityContains']) ? $_POST['seniorityContains'] : '';
+$seniorityStartsWith = isset($_POST['seniorityStartsWith']) ? $_POST['seniorityStartsWith'] : '';
+$seniorityIncludes = isset($_POST['seniorityIncludes']) ? $_POST['seniorityIncludes'] : '';
+$seniorityExcludes = isset($_POST['seniorityExcludes']) ? $_POST['seniorityExcludes'] : '';
 
-// Employee Count filters
-$accountEmployeeCountContains = isset($_POST['accountEmployeeCountContains']) ? $_POST['accountEmployeeCountContains'] : '';
-$accountEmployeeCountStartsWith = isset($_POST['accountEmployeeCountStartsWith']) ? $_POST['accountEmployeeCountStartsWith'] : '';
-$accountEmployeeCountIncludes = isset($_POST['accountEmployeeCountIncludes']) ? $_POST['accountEmployeeCountIncludes'] : '';
-$accountEmployeeCountExcludes = isset($_POST['accountEmployeeCountExcludes']) ? $_POST['accountEmployeeCountExcludes'] : '';
+// Title filters
+$titleContains = isset($_POST['titleContains']) ? $_POST['titleContains'] : '';
+$titleStartsWith = isset($_POST['titleStartsWith']) ? $_POST['titleStartsWith'] : '';
+$titleIncludes = isset($_POST['titleIncludes']) ? $_POST['titleIncludes'] : '';
+$titleExcludes = isset($_POST['titleExcludes']) ? $_POST['titleExcludes'] : '';
 
-// Founded Year filter
-$accountFoundedYear = isset($_POST['accountFoundedYear']) ? $_POST['accountFoundedYear'] : '';
+// Org Founded Year filter
+$orgFoundedYear = isset($_POST['orgFoundedYear']) ? $_POST['orgFoundedYear'] : '';
 
 // Country filter
 $country = isset($_POST['country']) ? $_POST['country'] : [];
@@ -493,27 +493,27 @@ if ($cachedData !== null) {
 // Escape all inputs
 $searchValue = $conn->real_escape_string($searchValue);
 
-$accountNameContains = $conn->real_escape_string($accountNameContains);
-$accountNameStartsWith = $conn->real_escape_string($accountNameStartsWith);
-$accountNameIncludes = $conn->real_escape_string($accountNameIncludes);
-$accountNameExcludes = $conn->real_escape_string($accountNameExcludes);
+$orgNameContains = $conn->real_escape_string($orgNameContains);
+$orgNameStartsWith = $conn->real_escape_string($orgNameStartsWith);
+$orgNameIncludes = $conn->real_escape_string($orgNameIncludes);
+$orgNameExcludes = $conn->real_escape_string($orgNameExcludes);
 
-$accountWebsiteContains = $conn->real_escape_string($accountWebsiteContains);
-$accountWebsiteStartsWith = $conn->real_escape_string($accountWebsiteStartsWith);
-$accountWebsiteIncludes = $conn->real_escape_string($accountWebsiteIncludes);
-$accountWebsiteExcludes = $conn->real_escape_string($accountWebsiteExcludes);
+$orgWebsiteContains = $conn->real_escape_string($orgWebsiteContains);
+$orgWebsiteStartsWith = $conn->real_escape_string($orgWebsiteStartsWith);
+$orgWebsiteIncludes = $conn->real_escape_string($orgWebsiteIncludes);
+$orgWebsiteExcludes = $conn->real_escape_string($orgWebsiteExcludes);
 
-$accountIndustryContains = $conn->real_escape_string($accountIndustryContains);
-$accountIndustryStartsWith = $conn->real_escape_string($accountIndustryStartsWith);
-$accountIndustryIncludes = $conn->real_escape_string($accountIndustryIncludes);
-$accountIndustryExcludes = $conn->real_escape_string($accountIndustryExcludes);
+$seniorityContains = $conn->real_escape_string($seniorityContains);
+$seniorityStartsWith = $conn->real_escape_string($seniorityStartsWith);
+$seniorityIncludes = $conn->real_escape_string($seniorityIncludes);
+$seniorityExcludes = $conn->real_escape_string($seniorityExcludes);
 
-$accountEmployeeCountContains = $conn->real_escape_string($accountEmployeeCountContains);
-$accountEmployeeCountStartsWith = $conn->real_escape_string($accountEmployeeCountStartsWith);
-$accountEmployeeCountIncludes = $conn->real_escape_string($accountEmployeeCountIncludes);
-$accountEmployeeCountExcludes = $conn->real_escape_string($accountEmployeeCountExcludes);
+$titleContains = $conn->real_escape_string($titleContains);
+$titleStartsWith = $conn->real_escape_string($titleStartsWith);
+$titleIncludes = $conn->real_escape_string($titleIncludes);
+$titleExcludes = $conn->real_escape_string($titleExcludes);
 
-$accountFoundedYear = $conn->real_escape_string($accountFoundedYear);
+$orgFoundedYear = $conn->real_escape_string($orgFoundedYear);
 
 // Construct main SQL query
 $sql = "SELECT * FROM data WHERE 1=1";
@@ -528,65 +528,65 @@ if (!empty($searchValue)) {
     $sql .= ")";
 }
 
-// Apply Account Name filters
-if (!empty($accountNameContains)) {
-    $sql .= " AND " . applyFilter('account_name', $accountNameContains, 'contains');
+// Apply Org Name filters
+if (!empty($orgNameContains)) {
+    $sql .= " AND " . applyFilter('org_name', $orgNameContains, 'contains');
 }
-if (!empty($accountNameStartsWith)) {
-    $sql .= " AND " . applyFilter('account_name', $accountNameStartsWith, 'starts_with');
+if (!empty($orgNameStartsWith)) {
+    $sql .= " AND " . applyFilter('org_name', $orgNameStartsWith, 'starts_with');
 }
-if (!empty($accountNameIncludes)) {
-    $sql .= " AND " . applyFilter('account_name', $accountNameIncludes, 'include');
+if (!empty($orgNameIncludes)) {
+    $sql .= " AND " . applyFilter('org_name', $orgNameIncludes, 'include');
 }
-if (!empty($accountNameExcludes)) {
-    $sql .= " AND " . applyFilter('account_name', $accountNameExcludes, 'exclude');
-}
-
-// Apply Website filters
-if (!empty($accountWebsiteContains)) {
-    $sql .= " AND " . applyFilter('account_website', $accountWebsiteContains, 'contains');
-}
-if (!empty($accountWebsiteStartsWith)) {
-    $sql .= " AND " . applyFilter('account_website', $accountWebsiteStartsWith, 'starts_with');
-}
-if (!empty($accountWebsiteIncludes)) {
-    $sql .= " AND " . applyFilter('account_website', $accountWebsiteIncludes, 'include');
-}
-if (!empty($accountWebsiteExcludes)) {
-    $sql .= " AND " . applyFilter('account_website', $accountWebsiteExcludes, 'exclude');
+if (!empty($orgNameExcludes)) {
+    $sql .= " AND " . applyFilter('org_name', $orgNameExcludes, 'exclude');
 }
 
-// Apply Industry filters
-if (!empty($accountIndustryContains)) {
-    $sql .= " AND " . applyFilter('account_industry', $accountIndustryContains, 'contains');
+// Apply Org Website filters
+if (!empty($orgWebsiteContains)) {
+    $sql .= " AND " . applyFilter('org_website_url', $orgWebsiteContains, 'contains');
 }
-if (!empty($accountIndustryStartsWith)) {
-    $sql .= " AND " . applyFilter('account_industry', $accountIndustryStartsWith, 'starts_with');
+if (!empty($orgWebsiteStartsWith)) {
+    $sql .= " AND " . applyFilter('org_website_url', $orgWebsiteStartsWith, 'starts_with');
 }
-if (!empty($accountIndustryIncludes)) {
-    $sql .= " AND " . applyFilter('account_industry', $accountIndustryIncludes, 'include');
+if (!empty($orgWebsiteIncludes)) {
+    $sql .= " AND " . applyFilter('org_website_url', $orgWebsiteIncludes, 'include');
 }
-if (!empty($accountIndustryExcludes)) {
-    $sql .= " AND " . applyFilter('account_industry', $accountIndustryExcludes, 'exclude');
-}
-
-// Apply Employee Count filters
-if (!empty($accountEmployeeCountContains)) {
-    $sql .= " AND " . applyFilter('account_employee_count_range', $accountEmployeeCountContains, 'contains');
-}
-if (!empty($accountEmployeeCountStartsWith)) {
-    $sql .= " AND " . applyFilter('account_employee_count_range', $accountEmployeeCountStartsWith, 'starts_with');
-}
-if (!empty($accountEmployeeCountIncludes)) {
-    $sql .= " AND " . applyFilter('account_employee_count_range', $accountEmployeeCountIncludes, 'include');
-}
-if (!empty($accountEmployeeCountExcludes)) {
-    $sql .= " AND " . applyFilter('account_employee_count_range', $accountEmployeeCountExcludes, 'exclude');
+if (!empty($orgWebsiteExcludes)) {
+    $sql .= " AND " . applyFilter('org_website_url', $orgWebsiteExcludes, 'exclude');
 }
 
-// Apply Founded Year filter
-if (!empty($accountFoundedYear)) {
-    $sql .= " AND `account_founded_year` = '$accountFoundedYear'";
+// Apply Seniority filters
+if (!empty($seniorityContains)) {
+    $sql .= " AND " . applyFilter('seniority', $seniorityContains, 'contains');
+}
+if (!empty($seniorityStartsWith)) {
+    $sql .= " AND " . applyFilter('seniority', $seniorityStartsWith, 'starts_with');
+}
+if (!empty($seniorityIncludes)) {
+    $sql .= " AND " . applyFilter('seniority', $seniorityIncludes, 'include');
+}
+if (!empty($seniorityExcludes)) {
+    $sql .= " AND " . applyFilter('seniority', $seniorityExcludes, 'exclude');
+}
+
+// Apply Title filters
+if (!empty($titleContains)) {
+    $sql .= " AND " . applyFilter('title', $titleContains, 'contains');
+}
+if (!empty($titleStartsWith)) {
+    $sql .= " AND " . applyFilter('title', $titleStartsWith, 'starts_with');
+}
+if (!empty($titleIncludes)) {
+    $sql .= " AND " . applyFilter('title', $titleIncludes, 'include');
+}
+if (!empty($titleExcludes)) {
+    $sql .= " AND " . applyFilter('title', $titleExcludes, 'exclude');
+}
+
+// Apply Org Founded Year filter
+if (!empty($orgFoundedYear)) {
+    $sql .= " AND `org_founded_year` = '$orgFoundedYear'";
 }
 
 // Apply Country filter
@@ -594,7 +594,7 @@ if (!empty($country)) {
     $countryConditions = [];
     foreach ($country as $c) {
         $escapedCountry = $conn->real_escape_string($c);
-        $countryConditions[] = "`account_country` = '$escapedCountry'";
+        $countryConditions[] = "`country` = '$escapedCountry'";
     }
     if (!empty($countryConditions)) {
         $sql .= " AND (" . implode(" OR ", $countryConditions) . ")";
@@ -606,7 +606,7 @@ if (!empty($city)) {
     $cityConditions = [];
     foreach ($city as $c) {
         $escapedCity = $conn->real_escape_string($c);
-        $cityConditions[] = "`account_city` = '$escapedCity'";
+        $cityConditions[] = "`city` = '$escapedCity'";
     }
     if (!empty($cityConditions)) {
         $sql .= " AND (" . implode(" OR ", $cityConditions) . ")";

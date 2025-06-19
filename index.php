@@ -1129,35 +1129,35 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                 <!-- Search Input -->
                 <div class="search-container">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Search by Account Name">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search by Org Name">
                 </div>
 
                 <!-- Account Name Filter -->
                 <div class="dropdown">
                     <button id="accountNameFilterBtn" class="filter-button">
-                        Account Name <i class="fas fa-chevron-down"></i>
+                        Org Name <i class="fas fa-chevron-down"></i>
                     </button>
                     <div id="accountNameDropdown" class="dropdown-content">
                         <div class="subfilter-container">
                             <div class="subfilter-row">
                                 <label class="subfilter-label">Contains</label>
                                 <input type="text" id="account_name_contains" class="subfilter-input"
-                                    placeholder="Enter Account Name">
+                                    placeholder="Enter Org Name">
                             </div>
                             <div class="subfilter-row">
                                 <label class="subfilter-label">Starts With</label>
                                 <input type="text" id="account_name_starts_with" class="subfilter-input"
-                                    placeholder="Enter Account Name">
+                                    placeholder="Enter Org Name">
                             </div>
                             <div class="subfilter-row">
                                 <label class="subfilter-label">Includes</label>
                                 <input type="text" id="account_name_includes" class="subfilter-input"
-                                    placeholder="Enter Account Name">
+                                    placeholder="Enter Org Name">
                             </div>
                             <div class="subfilter-row">
                                 <label class="subfilter-label">Excludes</label>
                                 <input type="text" id="account_name_excludes" class="subfilter-input"
-                                    placeholder="Enter Account Name">
+                                    placeholder="Enter Org Name">
                             </div>
                             <button id="apply_account_name_filter" class="subfilter-apply">Apply</button>
                         </div>
@@ -1212,19 +1212,19 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                     <div id="filterMenu" class="filter-menu">
                         <div class="checkbox-item">
                             <input type="checkbox" id="filter_website">
-                            <label for="filter_website">Website</label>
+                            <label for="filter_website">Org Website</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="filter_industry">
-                            <label for="filter_industry">Industry</label>
+                            <label for="filter_industry">Seniority</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="filter_employee_count">
-                            <label for="filter_employee_count">Employee Count</label>
+                            <label for="filter_employee_count">Title</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="filter_founded_year">
-                            <label for="filter_founded_year">Founded Year</label>
+                            <label for="filter_founded_year">Org Founded Year</label>
                         </div>
                     </div>
                 </div>
@@ -1257,10 +1257,10 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                 <table id="tuesdayTable" class="display" width="100%">
                     <thead>
                         <tr>
-                            <th>Account Name</th>
-                            <th>Account Website</th>
-                            <th>Account Industry</th>
-                            <th>Employee Count Range</th>
+                            <th>Org Name</th>
+                            <th>Org Website Url</th>
+                            <th>Seniority</th>
+                            <th>Title</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1476,7 +1476,7 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
             };
 
             // Fixed columns for display in the table
-            const fixedDisplayColumns = ['account_name', 'account_website', 'account_industry', 'account_employee_count_range'];
+            const fixedDisplayColumns = ['org_name', 'org_website_url', 'seniority', 'title'];
 
             // Columns selected for export (initially same as display columns)
             let exportColumns = [...fixedDisplayColumns];
@@ -1507,32 +1507,32 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                         // Pass the search values and operators to the PHP script
                         d.searchValue = activeFilters.searchValue;
 
-                        // Account Name filters
-                        d.accountNameContains = activeFilters.account_name.contains;
-                        d.accountNameStartsWith = activeFilters.account_name.starts_with;
-                        d.accountNameIncludes = activeFilters.account_name.includes;
-                        d.accountNameExcludes = activeFilters.account_name.excludes;
+                        // Org Name filters (client-side still uses activeFilters.account_name)
+                        d.orgNameContains = activeFilters.account_name.contains;
+                        d.orgNameStartsWith = activeFilters.account_name.starts_with;
+                        d.orgNameIncludes = activeFilters.account_name.includes;
+                        d.orgNameExcludes = activeFilters.account_name.excludes;
 
                         // Website filters
-                        d.accountWebsiteContains = activeFilters.account_website.contains;
-                        d.accountWebsiteStartsWith = activeFilters.account_website.starts_with;
-                        d.accountWebsiteIncludes = activeFilters.account_website.includes;
-                        d.accountWebsiteExcludes = activeFilters.account_website.excludes;
+                        d.orgWebsiteContains = activeFilters.account_website.contains;
+                        d.orgWebsiteStartsWith = activeFilters.account_website.starts_with;
+                        d.orgWebsiteIncludes = activeFilters.account_website.includes;
+                        d.orgWebsiteExcludes = activeFilters.account_website.excludes;
 
-                        // Industry filters
-                        d.accountIndustryContains = activeFilters.account_industry.contains;
-                        d.accountIndustryStartsWith = activeFilters.account_industry.starts_with;
-                        d.accountIndustryIncludes = activeFilters.account_industry.includes;
-                        d.accountIndustryExcludes = activeFilters.account_industry.excludes;
+                        // Seniority filters (using account_industry client-side object)
+                        d.seniorityContains = activeFilters.account_industry.contains;
+                        d.seniorityStartsWith = activeFilters.account_industry.starts_with;
+                        d.seniorityIncludes = activeFilters.account_industry.includes;
+                        d.seniorityExcludes = activeFilters.account_industry.excludes;
 
-                        // Employee Count filters
-                        d.accountEmployeeCountContains = activeFilters.account_employee_count_range.contains;
-                        d.accountEmployeeCountStartsWith = activeFilters.account_employee_count_range.starts_with;
-                        d.accountEmployeeCountIncludes = activeFilters.account_employee_count_range.includes;
-                        d.accountEmployeeCountExcludes = activeFilters.account_employee_count_range.excludes;
+                        // Title filters (using account_employee_count_range client-side object)
+                        d.titleContains = activeFilters.account_employee_count_range.contains;
+                        d.titleStartsWith = activeFilters.account_employee_count_range.starts_with;
+                        d.titleIncludes = activeFilters.account_employee_count_range.includes;
+                        d.titleExcludes = activeFilters.account_employee_count_range.excludes;
 
-                        // Founded Year filter
-                        d.accountFoundedYear = activeFilters.account_founded_year;
+                        // Org Founded Year filter
+                        d.orgFoundedYear = activeFilters.account_founded_year;
 
                         // Country filter
                         d.country = activeFilters.country;
@@ -1562,7 +1562,7 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                 },
                 "columns": [
                     {
-                        "data": "account_name",
+                        "data": "org_name",
                         "render": function (data, type, row) {
                             return (data && data.toLowerCase() !== 'nan' && data !== null) ?
                                 '<span class="expand-icon">▸</span>' + data :
@@ -1570,7 +1570,7 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                         }
                     },
                     {
-                        "data": "account_website",
+                        "data": "org_website_url",
                         "render": function (data, type, row) {
                             if (data && data.toLowerCase() !== 'nan' && data !== null) {
                                 return `<a href="${data}" target="_blank">${data}</a>`;
@@ -1579,13 +1579,13 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                         }
                     },
                     {
-                        "data": "account_industry",
+                        "data": "seniority",
                         "render": function (data, type, row) {
                             return (data && data.toLowerCase() !== 'nan' && data !== null) ? data : 'Not Found';
                         }
                     },
                     {
-                        "data": "account_employee_count_range",
+                        "data": "title",
                         "render": function (data, type, row) {
                             return (data && data.toLowerCase() !== 'nan' && data !== null) ? data : 'Not Found';
                         }
@@ -1866,21 +1866,37 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
             function addFilterButton(field) {
                 // Create filter button HTML
                 let buttonHtml = '';
+                let displayFieldName = formatFilterName(field);
+                let internalFieldId = field;
+
+                if (field === 'website') {
+                    displayFieldName = 'Org Website';
+                    internalFieldId = 'org_website';
+                } else if (field === 'industry') {
+                    displayFieldName = 'Seniority';
+                    internalFieldId = 'seniority';
+                } else if (field === 'employee_count') {
+                    displayFieldName = 'Title';
+                    internalFieldId = 'title';
+                } else if (field === 'founded_year') {
+                    displayFieldName = 'Org Founded Year';
+                    internalFieldId = 'org_founded_year'; // Use 'org_founded_year' for IDs
+                }
                 
-                if (field === 'founded_year') {
+                if (field === 'founded_year') { // Keep original field for this specific structure
                     // Special handling for year filter
                     buttonHtml = `
-                        <div class="dropdown" id="dropdown_${field}">
-                            <button id="${field}FilterBtn" class="filter-button">
-                                ${formatFilterName(field)} <i class="fas fa-chevron-down"></i>
+                        <div class="dropdown" id="dropdown_${internalFieldId}">
+                            <button id="${internalFieldId}FilterBtn" class="filter-button">
+                                ${displayFieldName} <i class="fas fa-chevron-down"></i>
                             </button>
-                            <div id="${field}Dropdown" class="dropdown-content">
+                            <div id="${internalFieldId}Dropdown" class="dropdown-content">
                                 <div class="subfilter-container">
                                     <div class="subfilter-row">
                                         <label class="subfilter-label">Year</label>
-                                        <input type="number" id="${field}_year" class="year-picker" placeholder="e.g., 2020" min="1800" max="2030">
+                                        <input type="number" id="${internalFieldId}_year" class="year-picker" placeholder="e.g., 2020" min="1800" max="2030">
                                     </div>
-                                    <button id="apply_${field}_filter" class="subfilter-apply">Apply</button>
+                                    <button id="apply_${internalFieldId}_filter" class="subfilter-apply">Apply</button>
                                 </div>
                             </div>
                         </div>
@@ -1888,29 +1904,29 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                 } else {
                     // Standard filter with text inputs
                     buttonHtml = `
-                        <div class="dropdown" id="dropdown_${field}">
-                            <button id="${field}FilterBtn" class="filter-button">
-                                ${formatFilterName(field)} <i class="fas fa-chevron-down"></i>
+                        <div class="dropdown" id="dropdown_${internalFieldId}">
+                            <button id="${internalFieldId}FilterBtn" class="filter-button">
+                                ${displayFieldName} <i class="fas fa-chevron-down"></i>
                             </button>
-                            <div id="${field}Dropdown" class="dropdown-content">
+                            <div id="${internalFieldId}Dropdown" class="dropdown-content">
                                 <div class="subfilter-container">
                                     <div class="subfilter-row">
                                         <label class="subfilter-label">Contains</label>
-                                        <input type="text" id="${field}_contains" class="subfilter-input" placeholder="Enter value">
+                                        <input type="text" id="${internalFieldId}_contains" class="subfilter-input" placeholder="Enter value">
                                     </div>
                                     <div class="subfilter-row">
                                         <label class="subfilter-label">Starts With</label>
-                                        <input type="text" id="${field}_starts_with" class="subfilter-input" placeholder="Enter value">
+                                        <input type="text" id="${internalFieldId}_starts_with" class="subfilter-input" placeholder="Enter value">
                                     </div>
                                     <div class="subfilter-row">
                                         <label class="subfilter-label">Includes</label>
-                                        <input type="text" id="${field}_includes" class="subfilter-input" placeholder="Enter value">
+                                        <input type="text" id="${internalFieldId}_includes" class="subfilter-input" placeholder="Enter value">
                                     </div>
                                     <div class="subfilter-row">
                                         <label class="subfilter-label">Excludes</label>
-                                        <input type="text" id="${field}_excludes" class="subfilter-input" placeholder="Enter value">
+                                        <input type="text" id="${internalFieldId}_excludes" class="subfilter-input" placeholder="Enter value">
                                     </div>
-                                    <button id="apply_${field}_filter" class="subfilter-apply">Apply</button>
+                                    <button id="apply_${internalFieldId}_filter" class="subfilter-apply">Apply</button>
                                 </div>
                             </div>
                         </div>
@@ -1921,62 +1937,64 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                 $(buttonHtml).insertBefore($('#addFilterBtn').parent());
 
                 // Add event listeners
-                $(`#${field}FilterBtn`).click(function (e) {
+                $(`#${internalFieldId}FilterBtn`).click(function (e) {
                     e.stopPropagation();
-                    $(`#${field}Dropdown`).toggleClass('show');
-                    $('.dropdown-content').not(`#${field}Dropdown`).removeClass('show');
+                    $(`#${internalFieldId}Dropdown`).toggleClass('show');
+                    // Close other dropdowns, but be careful if internalFieldId is different from field
+                    $('.dropdown-content').not($(`#${internalFieldId}Dropdown`)).removeClass('show');
                     $('#filterMenu').removeClass('show');
                 });
 
                 if (field === 'founded_year') {
-                    // Apply founded year filter
-                    $('#apply_founded_year_filter').click(function () {
-                        const year = $('#founded_year_year').val();
+                    // Apply org_founded_year filter
+                    $(`#apply_${internalFieldId}_filter`).click(function () {
+                        const year = $(`#${internalFieldId}_year`).val();
                         
                         // Update active filters
-                        activeFilters.account_founded_year = year;
+                        activeFilters.account_founded_year = year; // Still use account_founded_year for client-side storage
                         
                         // Add filter tags
                         if (year) {
-                            addFieldFilterTag('founded_year', 'equals', year);
+                            addFieldFilterTag('org_founded_year', 'equals', year); // Pass 'org_founded_year' for tag
                         }
                         
                         // Close dropdown
-                        $('#founded_year_dropdown').removeClass('show');
+                        $(`#${internalFieldId}Dropdown`).removeClass('show');
                         
                         // Reload data
                         table.ajax.reload();
                     });
                 } else {
-                    $(`#apply_${field}_filter`).click(function () {
-                        const contains = $(`#${field}_contains`).val();
-                        const startsWith = $(`#${field}_starts_with`).val();
-                        const includes = $(`#${field}_includes`).val();
-                        const excludes = $(`#${field}_excludes`).val();
+                    $(`#apply_${internalFieldId}_filter`).click(function () { // Use internalFieldId
+                        const contains = $(`#${internalFieldId}_contains`).val(); // Use internalFieldId
+                        const startsWith = $(`#${internalFieldId}_starts_with`).val(); // Use internalFieldId
+                        const includes = $(`#${internalFieldId}_includes`).val(); // Use internalFieldId
+                        const excludes = $(`#${internalFieldId}_excludes`).val(); // Use internalFieldId
 
                         // Set the appropriate filter values based on field
-                        if (field === 'website') {
+                        if (field === 'website') { // Original field name for logic
                             activeFilters.account_website.contains = contains;
                             activeFilters.account_website.starts_with = startsWith;
                             activeFilters.account_website.includes = includes;
                             activeFilters.account_website.excludes = excludes;
-                        } else if (field === 'industry') {
-                            activeFilters.account_industry.contains = contains;
+                        } else if (field === 'industry') { // Original field name for logic
+                            activeFilters.account_industry.contains = contains; // Still use account_industry for client-side storage
                             activeFilters.account_industry.starts_with = startsWith;
                             activeFilters.account_industry.includes = includes;
                             activeFilters.account_industry.excludes = excludes;
-                        } else if (field === 'employee_count') {
-                            activeFilters.account_employee_count_range.contains = contains;
+                        } else if (field === 'employee_count') { // Original field name for logic
+                            activeFilters.account_employee_count_range.contains = contains; // Still use account_employee_count_range for client-side
                             activeFilters.account_employee_count_range.starts_with = startsWith;
                             activeFilters.account_employee_count_range.includes = includes;
                             activeFilters.account_employee_count_range.excludes = excludes;
                         }
 
                         // Add filter tags
+                        // Pass original field for logic, but internalFieldId might be needed if tags are tied to it
                         updateFieldFilterTags(field, contains, startsWith, includes, excludes);
 
                         // Close dropdown
-                        $(`#${field}Dropdown`).removeClass('show');
+                        $(`#${internalFieldId}Dropdown`).removeClass('show'); // Use internalFieldId
 
                         // Reload data
                         table.ajax.reload();
@@ -2027,20 +2045,20 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
             // Update account name filter tags
             function updateAccountNameFilterTags() {
                 // Remove existing account name filter tags
-                $(`.filter-tag[data-field="account_name"]`).remove();
+                $(`.filter-tag[data-field="org_name"]`).remove();
 
                 // Add new tags for each non-empty filter
                 if (activeFilters.account_name.contains) {
-                    addFieldFilterTag('account_name', 'contains', activeFilters.account_name.contains);
+                    addFieldFilterTag('org_name', 'contains', activeFilters.account_name.contains);
                 }
                 if (activeFilters.account_name.starts_with) {
-                    addFieldFilterTag('account_name', 'starts_with', activeFilters.account_name.starts_with);
+                    addFieldFilterTag('org_name', 'starts_with', activeFilters.account_name.starts_with);
                 }
                 if (activeFilters.account_name.includes) {
-                    addFieldFilterTag('account_name', 'include', activeFilters.account_name.includes);
+                    addFieldFilterTag('org_name', 'include', activeFilters.account_name.includes);
                 }
                 if (activeFilters.account_name.excludes) {
-                    addFieldFilterTag('account_name', 'exclude', activeFilters.account_name.excludes);
+                    addFieldFilterTag('org_name', 'exclude', activeFilters.account_name.excludes);
                 }
             }
 
@@ -2086,21 +2104,31 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
 
             // Update field filter tags for other filters
             function updateFieldFilterTags(field, contains, startsWith, includes, excludes) {
+                let fieldForTag = field;
+                if (field === 'website') {
+                    fieldForTag = 'org_website';
+                } else if (field === 'industry') {
+                    fieldForTag = 'seniority';
+                } else if (field === 'employee_count') {
+                    fieldForTag = 'title';
+                } else if (field === 'founded_year') {
+                    fieldForTag = 'org_founded_year'; // This is the refined logic
+                }
                 // Remove existing filter tags for this field
-                $(`.filter-tag[data-field="${field}"]`).remove();
+                $(`.filter-tag[data-field="${fieldForTag}"]`).remove();
 
                 // Add new tags for each non-empty filter
                 if (contains) {
-                    addFieldFilterTag(field, 'contains', contains);
+                    addFieldFilterTag(fieldForTag, 'contains', contains);
                 }
                 if (startsWith) {
-                    addFieldFilterTag(field, 'starts_with', startsWith);
+                    addFieldFilterTag(fieldForTag, 'starts_with', startsWith);
                 }
                 if (includes) {
-                    addFieldFilterTag(field, 'include', includes);
+                    addFieldFilterTag(fieldForTag, 'include', includes);
                 }
                 if (excludes) {
-                    addFieldFilterTag(field, 'exclude', excludes);
+                    addFieldFilterTag(fieldForTag, 'exclude', excludes);
                 }
             }
 
@@ -2123,9 +2151,21 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
 
             // Add field filter tag to UI
             function addFieldFilterTag(field, operator, value) {
-                const displayField = formatFilterName(field);
+                let displayField = formatFilterName(field);
+                // Specific display name overrides
+                if (field === 'org_website') {
+                    displayField = 'Org Website';
+                } else if (field === 'seniority') {
+                    displayField = 'Seniority';
+                } else if (field === 'title') {
+                    displayField = 'Title';
+                } else if (field === 'org_founded_year') {
+                    displayField = 'Org Founded Year';
+                }
                 const displayOperator = formatOperator(operator);
-                const tagId = `${field}_${operator}_${value.replace(/\s+/g, '_')}`;
+
+                const idFieldSuffix = (field === 'org_website') ? 'website' : (field === 'seniority' ? 'industry' : (field === 'title' ? 'employee_count' : (field === 'org_founded_year' ? 'founded_year' : field)));
+                const tagId = `${idFieldSuffix}_${operator}_${value.replace(/\s+/g, '_')}`;
 
                 const filterTag = `
                     <div class="filter-tag" data-field="${field}" data-operator="${operator}" data-value="${value}" id="${tagId}">
@@ -2140,6 +2180,10 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
 
             // Format filter value for display
             function formatFilterName(value) {
+                if (value === 'website') return 'Org Website';
+                if (value === 'industry') return 'Seniority';
+                if (value === 'employee_count') return 'Title';
+                if (value === 'founded_year') return 'Org Founded Year'; // Display "Org Founded Year"
                 return value
                     .replace(/_/g, ' ')
                     .replace(/\b\w/g, l => l.toUpperCase());
@@ -2166,28 +2210,43 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
 
                 if (field) {
                     // Remove field filter
-                    if (field === 'account_name') {
+                    if (field === 'org_name') {
                         if (operator === 'contains') activeFilters.account_name.contains = '';
                         if (operator === 'starts_with') activeFilters.account_name.starts_with = '';
                         if (operator === 'include') activeFilters.account_name.includes = '';
                         if (operator === 'exclude') activeFilters.account_name.excludes = '';
-                    } else if (field === 'website') {
+                    } else if (field === 'org_website') { // Changed from 'website'
                         if (operator === 'contains') activeFilters.account_website.contains = '';
                         if (operator === 'starts_with') activeFilters.account_website.starts_with = '';
                         if (operator === 'include') activeFilters.account_website.includes = '';
                         if (operator === 'exclude') activeFilters.account_website.excludes = '';
-                    } else if (field === 'industry') {
-                        if (operator === 'contains') activeFilters.account_industry.contains = '';
+                        $('#filter_website').prop('checked', false);
+                        if (!activeFilters.account_website.contains && !activeFilters.account_website.starts_with && !activeFilters.account_website.includes && !activeFilters.account_website.excludes) {
+                            removeFilterButton('website');
+                        }
+                    } else if (field === 'seniority') { // Changed from 'industry' to 'seniority' for data-field
+                        if (operator === 'contains') activeFilters.account_industry.contains = ''; // Still uses account_industry
                         if (operator === 'starts_with') activeFilters.account_industry.starts_with = '';
                         if (operator === 'include') activeFilters.account_industry.includes = '';
                         if (operator === 'exclude') activeFilters.account_industry.excludes = '';
-                    } else if (field === 'employee_count') {
-                        if (operator === 'contains') activeFilters.account_employee_count_range.contains = '';
+                        $('#filter_industry').prop('checked', false); // Uncheck original checkbox
+                        if (!activeFilters.account_industry.contains && !activeFilters.account_industry.starts_with && !activeFilters.account_industry.includes && !activeFilters.account_industry.excludes) {
+                            removeFilterButton('industry');
+                        }
+                    } else if (field === 'title') { // Changed from 'employee_count' to 'title'
+                        if (operator === 'contains') activeFilters.account_employee_count_range.contains = ''; // Still uses account_employee_count_range
                         if (operator === 'starts_with') activeFilters.account_employee_count_range.starts_with = '';
                         if (operator === 'include') activeFilters.account_employee_count_range.includes = '';
                         if (operator === 'exclude') activeFilters.account_employee_count_range.excludes = '';
-                    } else if (field === 'founded_year') {
-                        activeFilters.account_founded_year = '';
+                        $('#filter_employee_count').prop('checked', false); // Uncheck original checkbox
+                        if (!activeFilters.account_employee_count_range.contains && !activeFilters.account_employee_count_range.starts_with && !activeFilters.account_employee_count_range.includes && !activeFilters.account_employee_count_range.excludes) {
+                            removeFilterButton('employee_count');
+                        }
+                    } else if (field === 'org_founded_year') { // Changed from 'founded_year'
+                        activeFilters.account_founded_year = ''; // Still use account_founded_year for client-side
+                        $('#filter_founded_year').prop('checked', false); // Uncheck original checkbox
+                        // No sub-filters for founded_year, so just remove the button
+                        removeFilterButton('founded_year'); // Pass original field name
                     } else if (field === 'country') {
                         // Remove the country from the array
                         const index = activeFilters.country.indexOf(value);
@@ -2352,63 +2411,63 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                 
                 // Account Name filters
                 if (activeFilters.account_name.contains) {
-                    exportUrl += '&accountNameContains=' + encodeURIComponent(activeFilters.account_name.contains);
+                    exportUrl += '&orgNameContains=' + encodeURIComponent(activeFilters.account_name.contains);
                 }
                 if (activeFilters.account_name.starts_with) {
-                    exportUrl += '&accountNameStartsWith=' + encodeURIComponent(activeFilters.account_name.starts_with);
+                    exportUrl += '&orgNameStartsWith=' + encodeURIComponent(activeFilters.account_name.starts_with);
                 }
                 if (activeFilters.account_name.includes) {
-                    exportUrl += '&accountNameIncludes=' + encodeURIComponent(activeFilters.account_name.includes);
+                    exportUrl += '&orgNameIncludes=' + encodeURIComponent(activeFilters.account_name.includes);
                 }
                 if (activeFilters.account_name.excludes) {
-                    exportUrl += '&accountNameExcludes=' + encodeURIComponent(activeFilters.account_name.excludes);
+                    exportUrl += '&orgNameExcludes=' + encodeURIComponent(activeFilters.account_name.excludes);
                 }
 
                 // Website filters
                 if (activeFilters.account_website.contains) {
-                    exportUrl += '&accountWebsiteContains=' + encodeURIComponent(activeFilters.account_website.contains);
+                    exportUrl += '&orgWebsiteContains=' + encodeURIComponent(activeFilters.account_website.contains);
                 }
                 if (activeFilters.account_website.starts_with) {
-                    exportUrl += '&accountWebsiteStartsWith=' + encodeURIComponent(activeFilters.account_website.starts_with);
+                    exportUrl += '&orgWebsiteStartsWith=' + encodeURIComponent(activeFilters.account_website.starts_with);
                 }
                 if (activeFilters.account_website.includes) {
-                    exportUrl += '&accountWebsiteIncludes=' + encodeURIComponent(activeFilters.account_website.includes);
+                    exportUrl += '&orgWebsiteIncludes=' + encodeURIComponent(activeFilters.account_website.includes);
                 }
                 if (activeFilters.account_website.excludes) {
-                    exportUrl += '&accountWebsiteExcludes=' + encodeURIComponent(activeFilters.account_website.excludes);
+                    exportUrl += '&orgWebsiteExcludes=' + encodeURIComponent(activeFilters.account_website.excludes);
                 }
 
-                // Industry filters
+                // Seniority filters (using account_industry client-side object)
                 if (activeFilters.account_industry.contains) {
-                    exportUrl += '&accountIndustryContains=' + encodeURIComponent(activeFilters.account_industry.contains);
+                    exportUrl += '&seniorityContains=' + encodeURIComponent(activeFilters.account_industry.contains);
                 }
                 if (activeFilters.account_industry.starts_with) {
-                    exportUrl += '&accountIndustryStartsWith=' + encodeURIComponent(activeFilters.account_industry.starts_with);
+                    exportUrl += '&seniorityStartsWith=' + encodeURIComponent(activeFilters.account_industry.starts_with);
                 }
                 if (activeFilters.account_industry.includes) {
-                    exportUrl += '&accountIndustryIncludes=' + encodeURIComponent(activeFilters.account_industry.includes);
+                    exportUrl += '&seniorityIncludes=' + encodeURIComponent(activeFilters.account_industry.includes);
                 }
                 if (activeFilters.account_industry.excludes) {
-                    exportUrl += '&accountIndustryExcludes=' + encodeURIComponent(activeFilters.account_industry.excludes);
+                    exportUrl += '&seniorityExcludes=' + encodeURIComponent(activeFilters.account_industry.excludes);
                 }
 
-                // Employee Count filters
+                // Title filters (using account_employee_count_range client-side object)
                 if (activeFilters.account_employee_count_range.contains) {
-                    exportUrl += '&accountEmployeeCountContains=' + encodeURIComponent(activeFilters.account_employee_count_range.contains);
+                    exportUrl += '&titleContains=' + encodeURIComponent(activeFilters.account_employee_count_range.contains);
                 }
                 if (activeFilters.account_employee_count_range.starts_with) {
-                    exportUrl += '&accountEmployeeCountStartsWith=' + encodeURIComponent(activeFilters.account_employee_count_range.starts_with);
+                    exportUrl += '&titleStartsWith=' + encodeURIComponent(activeFilters.account_employee_count_range.starts_with);
                 }
                 if (activeFilters.account_employee_count_range.includes) {
-                    exportUrl += '&accountEmployeeCountIncludes=' + encodeURIComponent(activeFilters.account_employee_count_range.includes);
+                    exportUrl += '&titleIncludes=' + encodeURIComponent(activeFilters.account_employee_count_range.includes);
                 }
                 if (activeFilters.account_employee_count_range.excludes) {
-                    exportUrl += '&accountEmployeeCountExcludes=' + encodeURIComponent(activeFilters.account_employee_count_range.excludes);
+                    exportUrl += '&titleExcludes=' + encodeURIComponent(activeFilters.account_employee_count_range.excludes);
                 }
 
-                // Founded Year filter
+                // Org Founded Year filter
                 if (activeFilters.account_founded_year) {
-                    exportUrl += '&accountFoundedYear=' + encodeURIComponent(activeFilters.account_founded_year);
+                    exportUrl += '&orgFoundedYear=' + encodeURIComponent(activeFilters.account_founded_year);
                 }
 
                 // Country filter
