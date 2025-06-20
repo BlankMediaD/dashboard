@@ -108,6 +108,35 @@ if ($action === 'getCountries') {
     exit;
 }
 
+// Get unique email statuses
+if ($action === 'getEmailStatuses') {
+    $cacheKey = 'tuesday_email_statuses'; // Cache key
+    $email_statuses = [];
+
+    if ($redis && $redis->exists($cacheKey)) {
+        $email_statuses = json_decode($redis->get($cacheKey), true);
+        echo json_encode(['success' => true, 'email_statuses' => $email_statuses, 'cached' => true]);
+        exit;
+    }
+
+    $sql = "SELECT DISTINCT email_status FROM data WHERE email_status IS NOT NULL AND email_status != '' ORDER BY email_status";
+    $result = $conn->query($sql);
+
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $email_statuses[] = $row['email_status'];
+        }
+        if ($redis) {
+            $redis->set($cacheKey, json_encode($email_statuses));
+            $redis->expire($cacheKey, $redisExpiry);
+        }
+        echo json_encode(['success' => true, 'email_statuses' => $email_statuses, 'cached' => false]);
+    } else {
+        echo json_encode(['success' => false, 'error' => $conn->error]);
+    }
+    exit;
+}
+
 // Get unique cities
 if ($action === 'getCities') {
     $cacheKey = 'tuesday_cities';
@@ -135,6 +164,35 @@ if ($action === 'getCities') {
         }
         
         echo json_encode(['success' => true, 'cities' => $cities, 'cached' => false]);
+    } else {
+        echo json_encode(['success' => false, 'error' => $conn->error]);
+    }
+    exit;
+}
+
+// Get unique country regions
+if ($action === 'getCountryRegions') {
+    $cacheKey = 'tuesday_country_regions'; // Cache key for country regions
+    $country_regions = [];
+
+    if ($redis && $redis->exists($cacheKey)) {
+        $country_regions = json_decode($redis->get($cacheKey), true);
+        echo json_encode(['success' => true, 'country_regions' => $country_regions, 'cached' => true]);
+        exit;
+    }
+
+    $sql = "SELECT DISTINCT country_region FROM data WHERE country_region IS NOT NULL AND country_region != '' ORDER BY country_region";
+    $result = $conn->query($sql);
+
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $country_regions[] = $row['country_region'];
+        }
+        if ($redis) {
+            $redis->set($cacheKey, json_encode($country_regions));
+            $redis->expire($cacheKey, $redisExpiry); // Use existing $redisExpiry
+        }
+        echo json_encode(['success' => true, 'country_regions' => $country_regions, 'cached' => false]);
     } else {
         echo json_encode(['success' => false, 'error' => $conn->error]);
     }
@@ -171,13 +229,26 @@ if ($action === 'exportToCSV') {
     $titleExcludes = isset($_GET['titleExcludes']) ? $_GET['titleExcludes'] : "";
     
     // Org Founded Year filter
-    $orgFoundedYear = isset($_GET['orgFoundedYear']) ? $_GET['orgFoundedYear'] : "";
+    $orgFoundedYear = isset($_GET['orgFoundedYear']) ? $conn->real_escape_string($_GET['orgFoundedYear']) : "";
     
+    // Job Start Date filters
+    $jobStartDateFrom = isset($_GET['jobStartDateFrom']) ? $conn->real_escape_string($_GET['jobStartDateFrom']) : "";
+    $jobStartDateTo = isset($_GET['jobStartDateTo']) ? $conn->real_escape_string($_GET['jobStartDateTo']) : "";
+
     // Country filter
     $country = isset($_GET['country']) ? json_decode($_GET['country'], true) : [];
     
     // City filter
     $city = isset($_GET['city']) ? json_decode($_GET['city'], true) : [];
+    if (json_last_error() !== JSON_ERROR_NONE) { $city = []; } // Handle potential JSON decode error for city
+
+    // Country Region filter
+    $country_region_filter_get = isset($_GET['country_region']) ? json_decode($_GET['country_region'], true) : [];
+    if (json_last_error() !== JSON_ERROR_NONE) { $country_region_filter_get = []; } // Handle potential JSON decode error
+
+    // Email Status filter
+    $email_status_filter_get = isset($_GET['email_status']) ? json_decode($_GET['email_status'], true) : [];
+    if (json_last_error() !== JSON_ERROR_NONE) { $email_status_filter_get = []; } // Handle potential JSON decode error
 
     // Apply limit if exportLimit is set
     $exportLimit = isset($_GET['limit']) && $_GET['limit'] !== '' ? (int)$_GET['limit'] : null;
@@ -208,7 +279,7 @@ if ($action === 'exportToCSV') {
     $titleIncludes = $conn->real_escape_string($titleIncludes);
     $titleExcludes = $conn->real_escape_string($titleExcludes);
     
-    $orgFoundedYear = $conn->real_escape_string($orgFoundedYear);
+    // $orgFoundedYear is already escaped above
 
     // Default columns if none selected
     if (!empty($selectedColumns)) {
@@ -308,6 +379,14 @@ if ($action === 'exportToCSV') {
         if (!empty($orgFoundedYear)) {
             $sql .= " AND `org_founded_year` = '$orgFoundedYear'";
         }
+
+        // Apply Job Start Date filters
+        if (!empty($jobStartDateFrom)) {
+            $sql .= " AND `job_start_date` >= '$jobStartDateFrom'";
+        }
+        if (!empty($jobStartDateTo)) {
+            $sql .= " AND `job_start_date` <= '$jobStartDateTo'";
+        }
         
         // Apply Country filter
         if (!empty($country)) {
@@ -333,6 +412,30 @@ if ($action === 'exportToCSV') {
             }
         }
         
+        // Apply Country Region filter for GET request
+        if (!empty($country_region_filter_get) && is_array($country_region_filter_get)) {
+            $regionConditions_get = [];
+            foreach ($country_region_filter_get as $region) {
+                $escapedRegion_get = $conn->real_escape_string($region);
+                $regionConditions_get[] = "'$escapedRegion_get'";
+            }
+            if (!empty($regionConditions_get)) { // Ensure there are conditions
+                $sql .= " AND `country_region` IN (" . implode(",", $regionConditions_get) . ")";
+            }
+        }
+
+        // Apply Email Status filter for GET request
+        if (!empty($email_status_filter_get) && is_array($email_status_filter_get)) {
+            $statusConditions_get = [];
+            foreach ($email_status_filter_get as $status) {
+                $escapedStatus_get = $conn->real_escape_string($status);
+                $statusConditions_get[] = "'$escapedStatus_get'";
+            }
+            if (!empty($statusConditions_get)) { // Check if array is not empty
+                $sql .= " AND `email_status` IN (" . implode(",", $statusConditions_get) . ")";
+            }
+        }
+
         // Apply row offset if startRow and endRow are set
         if ($startRow > 0 && $endRow > 0) {
             $sql .= " LIMIT " . ($startRow - 1) . ", " . ($endRow - $startRow + 1);
@@ -383,8 +486,12 @@ if ($action === 'exportToCSV') {
         $fileName .= 'Title_';
         $filtersApplied = true;
     }
-    if (!empty($orgFoundedYear)) {
+    if (!empty($orgFoundedYear)) { // This check is now correct
         $fileName .= 'OrgFoundedYear_';
+        $filtersApplied = true;
+    }
+    if (!empty($jobStartDateFrom) || !empty($jobStartDateTo)) {
+        $fileName .= 'JobStartDate_';
         $filtersApplied = true;
     }
     if (!empty($country)) {
@@ -393,6 +500,14 @@ if ($action === 'exportToCSV') {
     }
     if (!empty($city)) {
         $fileName .= 'City_';
+        $filtersApplied = true;
+    }
+    if (!empty($country_region_filter_get)) {
+        $fileName .= 'CountryRegion_';
+        $filtersApplied = true;
+    }
+    if (!empty($email_status_filter_get)) {
+        $fileName .= 'EmailStatus_';
         $filtersApplied = true;
     }
 
@@ -459,13 +574,23 @@ $titleIncludes = isset($_POST['titleIncludes']) ? $_POST['titleIncludes'] : '';
 $titleExcludes = isset($_POST['titleExcludes']) ? $_POST['titleExcludes'] : '';
 
 // Org Founded Year filter
-$orgFoundedYear = isset($_POST['orgFoundedYear']) ? $_POST['orgFoundedYear'] : '';
+$orgFoundedYear = isset($_POST['orgFoundedYear']) ? $conn->real_escape_string($_POST['orgFoundedYear']) : '';
+
+// Job Start Date filters
+$jobStartDateFrom = isset($_POST['jobStartDateFrom']) ? $conn->real_escape_string($_POST['jobStartDateFrom']) : '';
+$jobStartDateTo = isset($_POST['jobStartDateTo']) ? $conn->real_escape_string($_POST['jobStartDateTo']) : '';
 
 // Country filter
 $country = isset($_POST['country']) ? $_POST['country'] : [];
 
 // City filter
 $city = isset($_POST['city']) ? $_POST['city'] : [];
+
+// Country Region filter
+$country_region_filter = isset($_POST['country_region']) && is_array($_POST['country_region']) ? $_POST['country_region'] : [];
+
+// Email Status filter
+$email_status_filter = isset($_POST['email_status']) && is_array($_POST['email_status']) ? $_POST['email_status'] : [];
 
 // Get the page number and limit from the AJAX request (default to 1 and 10 if not provided)
 $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
@@ -513,7 +638,7 @@ $titleStartsWith = $conn->real_escape_string($titleStartsWith);
 $titleIncludes = $conn->real_escape_string($titleIncludes);
 $titleExcludes = $conn->real_escape_string($titleExcludes);
 
-$orgFoundedYear = $conn->real_escape_string($orgFoundedYear);
+// $orgFoundedYear is already escaped
 
 // Construct main SQL query
 $sql = "SELECT * FROM data WHERE 1=1";
@@ -589,6 +714,14 @@ if (!empty($orgFoundedYear)) {
     $sql .= " AND `org_founded_year` = '$orgFoundedYear'";
 }
 
+// Apply Job Start Date filters
+if (!empty($jobStartDateFrom)) {
+    $sql .= " AND `job_start_date` >= '$jobStartDateFrom'";
+}
+if (!empty($jobStartDateTo)) {
+    $sql .= " AND `job_start_date` <= '$jobStartDateTo'";
+}
+
 // Apply Country filter
 if (!empty($country)) {
     $countryConditions = [];
@@ -610,6 +743,30 @@ if (!empty($city)) {
     }
     if (!empty($cityConditions)) {
         $sql .= " AND (" . implode(" OR ", $cityConditions) . ")";
+    }
+}
+
+// Apply Country Region filter
+if (!empty($country_region_filter)) {
+    $regionConditions = [];
+    foreach ($country_region_filter as $region) {
+        $escapedRegion = $conn->real_escape_string($region);
+        $regionConditions[] = "'$escapedRegion'";
+    }
+    if (!empty($regionConditions)) { // Ensure there are conditions before adding to SQL
+        $sql .= " AND `country_region` IN (" . implode(",", $regionConditions) . ")";
+    }
+}
+
+// Apply Email Status filter
+if (!empty($email_status_filter)) {
+    $statusConditions = [];
+    foreach ($email_status_filter as $status) {
+        $escapedStatus = $conn->real_escape_string($status);
+        $statusConditions[] = "'$escapedStatus'";
+    }
+    if (!empty($statusConditions)) { // Check if array is not empty after processing
+        $sql .= " AND `email_status` IN (" . implode(",", $statusConditions) . ")";
     }
 }
 

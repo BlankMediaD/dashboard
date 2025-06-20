@@ -1226,6 +1226,18 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                             <input type="checkbox" id="filter_founded_year">
                             <label for="filter_founded_year">Org Founded Year</label>
                         </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="filter_country_region">
+                            <label for="filter_country_region">Country Region</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="filter_job_start_date">
+                            <label for="filter_job_start_date">Job Start Date</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="filter_email_status">
+                            <label for="filter_email_status">Email Status</label>
+                        </div>
                     </div>
                 </div>
 
@@ -1297,19 +1309,19 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                             <div class="column-group-title">Basic Information</div>
                             <div class="column-options">
                                 <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_id" checked> Account ID
+                                    <input type="checkbox" name="export_column" value="id" checked> ID
                                 </label>
                                 <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_name" checked> Account Name
+                                    <input type="checkbox" name="export_column" value="org_name" checked> Org Name
                                 </label>
                                 <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_industry" checked> Industry
+                                    <input type="checkbox" name="export_column" value="seniority" checked> Seniority
                                 </label>
                                 <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_website" checked> Website
+                                    <input type="checkbox" name="export_column" value="org_website_url" checked> Org Website Url
                                 </label>
                                 <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_employee_count_range" checked> Employee Count Range
+                                    <input type="checkbox" name="export_column" value="title" checked> Title
                                 </label>
                             </div>
                         </div>
@@ -1318,19 +1330,13 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                             <div class="column-group-title">Location Details</div>
                             <div class="column-options">
                                 <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_city" checked> City
+                                    <input type="checkbox" name="export_column" value="city" checked> City
                                 </label>
                                 <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_country" checked> Country
+                                    <input type="checkbox" name="export_column" value="country" checked> Country
                                 </label>
                                 <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_state" checked> State
-                                </label>
-                                <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_street" checked> Street
-                                </label>
-                                <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_postcode" checked> Postcode
+                                    <input type="checkbox" name="export_column" value="country_region" checked> Country Region
                                 </label>
                             </div>
                         </div>
@@ -1339,16 +1345,34 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                             <div class="column-group-title">Company Details</div>
                             <div class="column-options">
                                 <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_founded_year" checked> Founded Year
+                                    <input type="checkbox" name="export_column" value="org_founded_year" checked> Org Founded Year
                                 </label>
                                 <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_specialties" checked> Specialties
+                                    <input type="checkbox" name="export_column" value="org_primary_domain" checked> Org Primary Domain
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="column-group">
+                            <div class="column-group-title">Personal Details</div>
+                            <div class="column-options">
+                                <label class="column-checkbox">
+                                    <input type="checkbox" name="export_column" value="first_name" checked> First Name
                                 </label>
                                 <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_about_us" checked> About Us
+                                    <input type="checkbox" name="export_column" value="last_name" checked> Last Name
                                 </label>
                                 <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_primary_domain" checked> Primary Domain
+                                    <input type="checkbox" name="export_column" value="name" checked> Full Name
+                                </label>
+                                <label class="column-checkbox">
+                                    <input type="checkbox" name="export_column" value="email" checked> Email
+                                </label>
+                                <label class="column-checkbox">
+                                    <input type="checkbox" name="export_column" value="linkedin_url" checked> Personal LinkedIn URL
+                                </label>
+                                <label class="column-checkbox">
+                                    <input type="checkbox" name="export_column" value="job_start_date" checked> Job Start Date
                                 </label>
                             </div>
                         </div>
@@ -1357,22 +1381,7 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                             <div class="column-group-title">Additional Information</div>
                             <div class="column-options">
                                 <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_linkedin_url" checked> LinkedIn URL
-                                </label>
-                                <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_employee_profiles_on_linkedin" checked> LinkedIn Profiles
-                                </label>
-                                <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_has_cio" checked> Has CIO
-                                </label>
-                                <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_has_ciso" checked> Has CISO
-                                </label>
-                                <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_has_mobile_app" checked> Has Mobile App
-                                </label>
-                                <label class="column-checkbox">
-                                    <input type="checkbox" name="export_column" value="account_has_web_app" checked> Has Web App
+                                    <input type="checkbox" name="export_column" value="org_linkedin_url" checked> Org LinkedIn URL
                                 </label>
                             </div>
                         </div>
@@ -1472,7 +1481,9 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                 },
                 account_founded_year: '',
                 country: [],
-                city: []
+                city: [],
+                country_region: [],
+                email_status: []
             };
 
             // Fixed columns for display in the table
@@ -1482,6 +1493,96 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
             let exportColumns = [...fixedDisplayColumns];
 
             let activeFilterButtons = ['account_name', 'account_country', 'account_city']; // Track which filter buttons are active
+
+            // Function to load Country Region options
+            function loadCountryRegionOptions() {
+                // Check if options are already loaded to prevent multiple calls if UI is redrawn
+                if ($('#country_region_options').children().length > 0 && !$('#country_region_options').find('.loading-placeholder').length) {
+                    return;
+                }
+                $('#country_region_options').html('<div class="loading-placeholder">Loading regions...</div>'); // Placeholder
+
+                $.ajax({
+                    url: 'data.php', type: 'POST', data: { action: 'getCountryRegions' }, dataType: 'json',
+                    success: function(response) {
+                        if (response.success && response.country_regions) {
+                            let html = '';
+                            response.country_regions.forEach(function(region) {
+                                // Sanitize region name for ID
+                                const regionId = `region_${region.replace(/[^a-zA-Z0-9_]/g, '_')}`;
+                                html += `<div class="checkbox-item region-option">
+                                             <input type="checkbox" id="${regionId}" value="${region}">
+                                             <label for="${regionId}">${region}</label>
+                                         </div>`;
+                            });
+                            $('#country_region_options').html(html);
+
+                            // Search functionality for country regions
+                            $('#country_region_search').off('input').on('input', function () { // .off to prevent multiple bindings
+                                const searchTerm = $(this).val().toLowerCase();
+                                $('#country_region_options .region-option').each(function () {
+                                    const regionName = $(this).find('label').text().toLowerCase();
+                                    $(this).toggle(regionName.includes(searchTerm));
+                                });
+                            });
+
+                            // Select/Deselect All for country regions
+                            $('#selectAllCountryRegions').off('change').on('change', function() { // .off to prevent multiple bindings
+                                const isChecked = $(this).prop('checked');
+                                $('#country_region_options .region-option input[type="checkbox"]').prop('checked', isChecked);
+                            });
+                        } else {
+                             $('#country_region_options').html('<div>No regions found or error.</div>');
+                        }
+                    },
+                    error: function() {
+                        $('#country_region_options').html('<div>Error loading regions.</div>');
+                    }
+                });
+            }
+
+            // Function to load Email Status options
+            function loadEmailStatusOptions() {
+                if ($('#email_status_options').children().length > 0 && !$('#email_status_options').find('.loading-placeholder').length) {
+                    return;
+                }
+                $('#email_status_options').html('<div class="loading-placeholder">Loading statuses...</div>');
+
+                $.ajax({
+                    url: 'data.php', type: 'POST', data: { action: 'getEmailStatuses' }, dataType: 'json',
+                    success: function(response) {
+                        if (response.success && response.email_statuses) {
+                            let html = '';
+                            response.email_statuses.forEach(function(status) {
+                                const statusId = `status_${status.replace(/[^a-zA-Z0-9_]/g, '_')}`;
+                                html += `<div class="checkbox-item status-option">
+                                             <input type="checkbox" id="${statusId}" value="${status}">
+                                             <label for="${statusId}">${status}</label>
+                                         </div>`;
+                            });
+                            $('#email_status_options').html(html);
+
+                            $('#email_status_search').off('input').on('input', function () {
+                                const searchTerm = $(this).val().toLowerCase();
+                                $('#email_status_options .status-option').each(function () {
+                                    const statusName = $(this).find('label').text().toLowerCase();
+                                    $(this).toggle(statusName.includes(searchTerm));
+                                });
+                            });
+
+                            $('#selectAllEmailStatuses').off('change').on('change', function() {
+                                const isChecked = $(this).prop('checked');
+                                $('#email_status_options .status-option input[type="checkbox"]').prop('checked', isChecked);
+                            });
+                        } else {
+                             $('#email_status_options').html('<div>No statuses found or error.</div>');
+                        }
+                    },
+                    error: function() {
+                        $('#email_status_options').html('<div>Error loading statuses.</div>');
+                    }
+                });
+            }
 
             // Initialize the data table
             let table = $('#tuesdayTable').DataTable({
@@ -1539,6 +1640,16 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
 
                         // City filter
                         d.city = activeFilters.city;
+
+                        // Country Region filter
+                        if (activeFilters.country_region && activeFilters.country_region.length > 0) {
+                            d.country_region = activeFilters.country_region;
+                        }
+
+                        // Email Status filter
+                        if (activeFilters.email_status && activeFilters.email_status.length > 0) {
+                            d.email_status = activeFilters.email_status;
+                        }
 
                         d.page = Math.floor(d.start / d.length) + 1;  // Add page number for server-side pagination
                         d.limit = d.length;  // Add limit for pagination
@@ -1880,10 +1991,16 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                     internalFieldId = 'title';
                 } else if (field === 'founded_year') {
                     displayFieldName = 'Org Founded Year';
-                    internalFieldId = 'org_founded_year'; // Use 'org_founded_year' for IDs
+                    internalFieldId = 'org_founded_year';
+                } else if (field === 'country_region') {
+                    displayFieldName = 'Country Region';
+                    internalFieldId = 'country_region'; // Ensure this is used for IDs if needed
+                } else if (field === 'email_status') {
+                    displayFieldName = 'Email Status';
+                    internalFieldId = 'email_status';
                 }
                 
-                if (field === 'founded_year') { // Keep original field for this specific structure
+                if (field === 'founded_year') {
                     // Special handling for year filter
                     buttonHtml = `
                         <div class="dropdown" id="dropdown_${internalFieldId}">
@@ -1897,6 +2014,50 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                                         <input type="number" id="${internalFieldId}_year" class="year-picker" placeholder="e.g., 2020" min="1800" max="2030">
                                     </div>
                                     <button id="apply_${internalFieldId}_filter" class="subfilter-apply">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (field === 'country_region') {
+                    // Ensure unique IDs for the dropdown and its elements if generating multiple
+                    // For this task, assuming one instance or careful ID management if multiple.
+                    buttonHtml = `
+                        <div class="dropdown" id="dropdown_country_region">
+                            <button id="countryRegionFilterBtn" class="filter-button">
+                                Country Region <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div id="country_region_Dropdown" class="dropdown-content">
+                                <div class="subfilter-container">
+                                    <input type="text" id="country_region_search" class="filter-search" placeholder="Search regions...">
+                                    <div class="select-all-columns">
+                                        <input type="checkbox" id="selectAllCountryRegions">
+                                        <label for="selectAllCountryRegions">Select/Deselect All</label>
+                                    </div>
+                                    <div id="country_region_options" class="options-container">
+                                        <!-- Options loaded dynamically -->
+                                    </div>
+                                    <button id="apply_country_region_filter" class="subfilter-apply">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (field === 'email_status') {
+                    buttonHtml = `
+                        <div class="dropdown" id="dropdown_email_status">
+                            <button id="emailStatusFilterBtn" class="filter-button">
+                                Email Status <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div id="email_status_Dropdown" class="dropdown-content">
+                                <div class="subfilter-container">
+                                    <input type="text" id="email_status_search" class="filter-search" placeholder="Search statuses...">
+                                    <div class="select-all-columns">
+                                        <input type="checkbox" id="selectAllEmailStatuses">
+                                        <label for="selectAllEmailStatuses">Select/Deselect All</label>
+                                    </div>
+                                    <div id="email_status_options" class="options-container">
+                                        <!-- Options loaded dynamically -->
+                                    </div>
+                                    <button id="apply_email_status_filter" class="subfilter-apply">Apply</button>
                                 </div>
                             </div>
                         </div>
@@ -1950,22 +2111,50 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                     $(`#apply_${internalFieldId}_filter`).click(function () {
                         const year = $(`#${internalFieldId}_year`).val();
                         
-                        // Update active filters
-                        activeFilters.account_founded_year = year; // Still use account_founded_year for client-side storage
+                        activeFilters.account_founded_year = year;
                         
-                        // Add filter tags
                         if (year) {
-                            addFieldFilterTag('org_founded_year', 'equals', year); // Pass 'org_founded_year' for tag
+                            addFieldFilterTag('org_founded_year', 'equals', year);
                         }
                         
-                        // Close dropdown
                         $(`#${internalFieldId}Dropdown`).removeClass('show');
-                        
-                        // Reload data
                         table.ajax.reload();
                     });
+                } else if (field === 'country_region') {
+                    // Load options and set up apply button for country_region
+                    loadCountryRegionOptions();
+
+                    // Ensure the click handler is specific to this instance if filters can be added multiple times.
+                    // Since IDs are fixed for now, this should be okay.
+                    $('#apply_country_region_filter').off('click').on('click', function() { // .off to prevent multiple bindings
+                        const selectedRegions = [];
+                        // Ensure we are selecting from the correct options container if multiple exist
+                        $(this).closest('.dropdown-content').find('#country_region_options input[type="checkbox"]:checked').each(function() {
+                            selectedRegions.push($(this).val());
+                        });
+                        activeFilters.country_region = selectedRegions;
+                        updateCountryRegionFilterTags(selectedRegions);
+                        $(this).closest('.dropdown-content').removeClass('show');
+                        table.ajax.reload();
+                    });
+
+                } else if (field === 'email_status') {
+                    loadEmailStatusOptions();
+                    $('#apply_email_status_filter').off('click').on('click', function() {
+                        const selectedStatuses = [];
+                        $(this).closest('.dropdown-content').find('#email_status_options input[type="checkbox"]:checked').each(function() {
+                            selectedStatuses.push($(this).val());
+                        });
+                        activeFilters.email_status = selectedStatuses;
+                        updateEmailStatusFilterTags(selectedStatuses); // New function for tags
+                        $(this).closest('.dropdown-content').removeClass('show');
+                        table.ajax.reload();
+                    });
+                } else if (field === 'job_start_date') { // Initialize flatpickr for job_start_date
+                        flatpickr(`#${internalFieldId}_from`, { dateFormat: "Y-m-d" });
+                        flatpickr(`#${internalFieldId}_to`, { dateFormat: "Y-m-d" });
                 } else {
-                    $(`#apply_${internalFieldId}_filter`).click(function () { // Use internalFieldId
+                    $(`#apply_${internalFieldId}_filter`).click(function () {
                         const contains = $(`#${internalFieldId}_contains`).val(); // Use internalFieldId
                         const startsWith = $(`#${internalFieldId}_starts_with`).val(); // Use internalFieldId
                         const includes = $(`#${internalFieldId}_includes`).val(); // Use internalFieldId
@@ -2082,6 +2271,44 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                 });
             }
 
+            // Update Email Status filter tags
+            function updateEmailStatusFilterTags(selectedStatuses) {
+                $(`.filter-tag[data-field="email_status"]`).remove();
+                selectedStatuses.forEach(function(status) {
+                    const statusIdSafe = status.replace(/[^a-zA-Z0-9_]/g, '_');
+                    const tagId = `email_status_tag_${statusIdSafe}`;
+                    const filterTag = `
+                        <div class="filter-tag" data-field="email_status" data-value="${status}" id="${tagId}">
+                            <span>Email Status: "${status}"</span>
+                            <span class="remove-filter" data-field="email_status" data-value="${status}">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        </div>
+                    `;
+                    $('#activeFilters').append(filterTag);
+                });
+            }
+
+            // Update Country Region filter tags
+            function updateCountryRegionFilterTags(selectedRegions) {
+                // Remove existing country region filter tags
+                $(`.filter-tag[data-field="country_region"]`).remove();
+
+                selectedRegions.forEach(function(region) {
+                    const regionIdSafe = region.replace(/[^a-zA-Z0-9_]/g, '_');
+                    const tagId = `country_region_tag_${regionIdSafe}`; // Ensure unique tag ID
+                    const filterTag = `
+                        <div class="filter-tag" data-field="country_region" data-value="${region}" id="${tagId}">
+                            <span>Country Region: "${region}"</span>
+                            <span class="remove-filter" data-field="country_region" data-value="${region}">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        </div>
+                    `;
+                    $('#activeFilters').append(filterTag);
+                });
+            }
+
             // Update city filter tags
             function updateCityFilterTags(selectedCities) {
                 // Remove existing city filter tags
@@ -2112,7 +2339,9 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                 } else if (field === 'employee_count') {
                     fieldForTag = 'title';
                 } else if (field === 'founded_year') {
-                    fieldForTag = 'org_founded_year'; // This is the refined logic
+                    fieldForTag = 'org_founded_year';
+                } else if (field === 'country_region') {
+                    fieldForTag = 'country_region';
                 }
                 // Remove existing filter tags for this field
                 $(`.filter-tag[data-field="${fieldForTag}"]`).remove();
@@ -2161,10 +2390,12 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                     displayField = 'Title';
                 } else if (field === 'org_founded_year') {
                     displayField = 'Org Founded Year';
+                } else if (field === 'country_region') {
+                    displayField = 'Country Region';
                 }
                 const displayOperator = formatOperator(operator);
 
-                const idFieldSuffix = (field === 'org_website') ? 'website' : (field === 'seniority' ? 'industry' : (field === 'title' ? 'employee_count' : (field === 'org_founded_year' ? 'founded_year' : field)));
+                const idFieldSuffix = (field === 'org_website') ? 'website' : (field === 'seniority' ? 'industry' : (field === 'title' ? 'employee_count' : (field === 'org_founded_year' ? 'founded_year' : (field === 'country_region' ? 'country_region' : field))));
                 const tagId = `${idFieldSuffix}_${operator}_${value.replace(/\s+/g, '_')}`;
 
                 const filterTag = `
@@ -2183,7 +2414,8 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                 if (value === 'website') return 'Org Website';
                 if (value === 'industry') return 'Seniority';
                 if (value === 'employee_count') return 'Title';
-                if (value === 'founded_year') return 'Org Founded Year'; // Display "Org Founded Year"
+                if (value === 'founded_year') return 'Org Founded Year';
+                if (value === 'country_region') return 'Country Region';
                 return value
                     .replace(/_/g, ' ')
                     .replace(/\b\w/g, l => l.toUpperCase());
@@ -2242,11 +2474,39 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                         if (!activeFilters.account_employee_count_range.contains && !activeFilters.account_employee_count_range.starts_with && !activeFilters.account_employee_count_range.includes && !activeFilters.account_employee_count_range.excludes) {
                             removeFilterButton('employee_count');
                         }
-                    } else if (field === 'org_founded_year') { // Changed from 'founded_year'
-                        activeFilters.account_founded_year = ''; // Still use account_founded_year for client-side
-                        $('#filter_founded_year').prop('checked', false); // Uncheck original checkbox
-                        // No sub-filters for founded_year, so just remove the button
-                        removeFilterButton('founded_year'); // Pass original field name
+                    } else if (field === 'org_founded_year') {
+                        activeFilters.account_founded_year = '';
+                        $('#filter_founded_year').prop('checked', false);
+                        removeFilterButton('founded_year');
+                    } else if (field === 'country_region') {
+                        const regionValue = $(this).data('value'); // Get value from data attribute
+                        const regionIndex = activeFilters.country_region.indexOf(regionValue);
+                        if (regionIndex > -1) {
+                            activeFilters.country_region.splice(regionIndex, 1);
+                        }
+                        // Uncheck the corresponding checkbox in the filter dropdown
+                        const regionIdSafe = regionValue.replace(/[^a-zA-Z0-9_]/g, '_');
+                        $(`#country_region_options #region_${regionIdSafe}`).prop('checked', false);
+
+                        // If all country_region filters are removed, uncheck the main filter menu checkbox
+                        if (activeFilters.country_region.length === 0) {
+                            $('#filter_country_region').prop('checked', false);
+                            // Optionally, remove the filter button itself if no specific regions are selected and this is desired behavior
+                            // removeFilterButton('country_region'); // This might be too aggressive if user wants to re-add easily
+                        }
+                    } else if (field === 'email_status') {
+                        const statusValue = $(this).data('value');
+                        const statusIndex = activeFilters.email_status.indexOf(statusValue);
+                        if (statusIndex > -1) {
+                            activeFilters.email_status.splice(statusIndex, 1);
+                        }
+                        const statusIdSafe = statusValue.replace(/[^a-zA-Z0-9_]/g, '_');
+                        $(`#email_status_options #status_${statusIdSafe}`).prop('checked', false);
+
+                        if (activeFilters.email_status.length === 0) {
+                            $('#filter_email_status').prop('checked', false);
+                            // removeFilterButton('email_status'); // Optional: remove button if not needed
+                        }
                     } else if (field === 'country') {
                         // Remove the country from the array
                         const index = activeFilters.country.indexOf(value);
@@ -2468,6 +2728,16 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
                 // Org Founded Year filter
                 if (activeFilters.account_founded_year) {
                     exportUrl += '&orgFoundedYear=' + encodeURIComponent(activeFilters.account_founded_year);
+                }
+
+                // Country Region filter
+                if (activeFilters.country_region && activeFilters.country_region.length > 0) {
+                    exportUrl += '&country_region=' + encodeURIComponent(JSON.stringify(activeFilters.country_region));
+                }
+
+                // Email Status filter for export
+                if (activeFilters.email_status && activeFilters.email_status.length > 0) {
+                    exportUrl += '&email_status=' + encodeURIComponent(JSON.stringify(activeFilters.email_status));
                 }
 
                 // Country filter
